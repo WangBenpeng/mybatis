@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pengo.demo.chapter04.mapper.StudentHealthFemaleMapper">
+
+    <select id="findStudentHealthFemaleByStuId"
+            resultType="com.pengo.demo.chapter04.entity.StudentHealthFemaleBean">
+        select * from t_student_health_female where student_id = #{stuId}
+    </select>
+</mapper>

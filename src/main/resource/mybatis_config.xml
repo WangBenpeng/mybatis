@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration><!--配置-->
+    <!--属性-->
+    <!--子元素:优先级3-->
+    <properties>
+        <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/mybatis?serverTimezone=Asia/Shanghai"/>
+        <property name="username" value="root"/>
+        <property name="password" value="rootroot"/>
+    </properties>
+    <!--配置文件:优先级2-->
+<!--    <properties resource="jdbc.properties"/>-->
+
+
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!--懒加载（默认按照层级）-->
+<!--        <setting name="lazyLoadingEnabled" value="true"/>-->
+        <!--是否按照层级加载-->
+<!--        <setting name="aggressiveLazyLoading" value="false"/>-->
+<!--        <setting name="cacheEnabled" value="true"/>-->
+    </settings>
+    <typeAliases>
+<!--        <typeAlias type="java.lang.StringBuilder" alias="string"/>--><!--不允许重复别名-->
+        <!--使用类指定别名-->
+<!--        <typeAlias type="com.pengo.demo.chapter01.Role" alias="role"/>-->
+        <!--扫描包指定别名-->
+        <package name="com.pengo.demo.chapter01"/>
+    </typeAliases>
+<!--    <typeHandlers>-->
+        <!--类指定-->
+<!--        <typeHandler handler="com.pengo.demo.chapter01.type.MyStringTypeHandler"/>-->
+        <!--包扫描-->
+<!--        <package name="com.pengo.demo.chapter01.type"/>-->
+<!--        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="com.pengo.demo.chapter01.Sex"/>-->
+<!--        <typeHandler handler="com.pengo.demo.chapter01.type.SexEnumTypeHandler"-->
+<!--                     javaType="com.pengo.demo.chapter01.Sex"/>-->
+<!--    </typeHandlers>-->
+<!--    <objectFactory type="com.pengo.demo.chapter01.factory.MyObjectFactory">-->
+<!--        <property name="name" value="MyObjectFactory"/>-->
+<!--    </objectFactory>-->
+    <plugins>
+<!--        <plugin interceptor="com.pengo.demo.chapter07.plugin.MyPlugin">-->
+<!--            <property name="dbType" value="mysql"/>-->
+<!--        </plugin>-->
+<!--        <plugin interceptor="com.pengo.demo.chapter07.plugin.QueryLimitPlugin">-->
+<!--            <property name="dbType" value="mysql"/>-->
+<!--            <property name="limit" value="10"/>-->
+<!--        </plugin>-->
+        <plugin interceptor="com.pengo.demo.chapter07.plugin.PagingPlugin">
+            <property name="default.page" value="1"/>
+            <property name="default.pageSize" value="10"/>
+            <property name="default.useFlag" value="true"/>
+            <property name="default.checkFlag" value="false"/>
+        </plugin>
+    </plugins>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+<!--                <property name="poolPingEnabled" value="true"/>-->
+<!--                <property name="poolPingQuery" value="SELECT 1 FROM DUAL"/>-->
+            </dataSource>
+        </environment>
+    </environments>
+<!--    <databaseIdProvider type="com.pengo.demo.chapter01.provider.MyDatabaseIdProvider">-->
+<!--        <property name="SQL Server" value="sqlserver"/>-->
+<!--        <property name="MySQL" value="mysql"/>-->
+<!--        <property name="DB2" value="db2"/>-->
+<!--        <property name="Oracle" value="oracle"/>-->
+<!--    </databaseIdProvider>-->
+    <mappers>
+        <!--文件路径引用-->
+        <mapper resource="com/pengo/demo/chapter01/mapper/RoleMapper.xml"/>
+        <mapper resource="com/pengo/demo/chapter01/mapper/UserMapper.xml"/>
+        <mapper class="com.pengo.demo.chapter04.mapper.StudentMapper"/>
+        <mapper class="com.pengo.demo.chapter04.mapper.StudentSelfcardMapper"/>
+        <mapper class="com.pengo.demo.chapter04.mapper.StudentLectureMapper"/>
+        <mapper class="com.pengo.demo.chapter04.mapper.LectureMapper"/>
+        <mapper class="com.pengo.demo.chapter04.mapper.StudentHealthFemaleMapper"/>
+        <mapper class="com.pengo.demo.chapter04.mapper.StudentHealthMaleMapper"/>
+        <mapper class="com.pengo.demo.chapter09.ColorMapper"/>
+        <!--包名引用-->
+<!--        <package name="com.pengo.demo.chapter01.mapper.RoleMapper"/>-->
+<!--        <package name="com.pengo.demo.chapter01.mapper.UserMapper"/>-->
+        <!--类注册引用-->
+<!--        <mapper class="com.pengo.demo.chapter01.mapper.RoleMapper"/>-->
+<!--        <mapper class="com.pengo.demo.chapter01.mapper.UserMapper"/>-->
+        <!--文件url引用-->
+<!--        <mapper url="file:///Users/pengo/IdeaProjects/sourcecode/mybatis/mybatis/src/main/java/com/pengo/demo/chapter01/mapper/RoleMapper.xml"/>-->
+<!--        <mapper url="file:///Users/pengo/IdeaProjects/sourcecode/mybatis/mybatis/src/main/java/com/pengo/demo/chapter01/mapper/UserMapper.xml"/>-->
+    </mappers>
+
+</configuration>

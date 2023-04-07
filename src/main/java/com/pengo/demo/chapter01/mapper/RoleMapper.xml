@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pengo.demo.chapter01.mapper.RoleMapper">
+    <resultMap id="roleMap" type="role">
+        <!--指定构造方法-->
+        <constructor>
+            <idArg column="id" javaType="long"/>
+            <arg column="role_name" javaType="string"/>
+            <arg column="note" javaType="string"/>
+        </constructor>
+        <id column="id" property="id" javaType="long" jdbcType="BIGINT"/>
+        <result column="role_name" property="roleName" javaType="string" jdbcType="VARCHAR"/>
+        <result column="note" property="note" typeHandler="com.pengo.demo.chapter01.type.MyStringTypeHandler"/>
+    </resultMap>
+
+    <sql id="role_columns">
+        id,role_name,note
+    </sql>
+    <sql id="role_columns_prefix">
+        #{prefix}.id,#{prefix}.role_name,#{prefix}.note
+    </sql>
+    
+    <insert id="insertRole" parameterType="role">
+        INSERT INTO t_role (id,role_name, note)
+        VALUES (#{id},#{roleName},#{note});
+    </insert>
+    <insert id="insertRoleReturnId" parameterType="role" useGeneratedKeys="true" keyProperty="id">
+        /*自动生成主键*/
+        <selectKey keyProperty="id" resultType="long" order="BEFORE">
+            select if(max(id) is null,20,max(id)+2) as newId from t_role
+        </selectKey>
+        INSERT INTO t_role (id,role_name, note)
+        VALUES (#{id},#{roleName},#{note});
+    </insert>
+    <delete id="deleteRole">
+        delete
+        from t_role
+        where id = #{id};
+    </delete>
+    <select id="getRole" parameterType="long" resultMap="roleMap">
+        select
+        <include refid="role_columns_prefix"></include>
+        from t_role r where id = #{id}
+    </select>
+    <select id="findRole" parameterType="long" resultMap="roleMap">
+        select id,role_name,note
+        from t_role
+        where role_name like concat('%', #{roleName javaType=string,jdbcType=VARCHAR,typeHandler=com.pengo.demo.chapter01.type.MyStringTypeHandler},'%')
+    </select>
+    <select id="getRoleReturnMap" resultType="java.util.Map">
+        select
+        <include refid="role_columns_prefix"></include>
+        from t_role r where id = #{id}
+    </select>
+
+    <select id="findRoles" resultType="com.pengo.demo.chapter01.Role">
+        <if test="roleName != null and roleName != ''">
+            <bind name="bind_name" value="'%'+roleName+'%'"/>
+        </if>
+        <if test="note != null and note != ''">
+            <bind name="bind_note" value="'%'+note+'%'"/>
+        </if>
+        select
+        id,role_name,note
+        from t_role
+<!--        where 1 = 1
+        <choose>
+            <when test="roleName != null and roleName != ''">
+                AND role_name = #{roleName}
+            </when>
+            <otherwise>
+                AND note is not null
+            </otherwise>
+        </choose>-->
+        <!--<where>
+            <if test="roleName != null and roleName != ''">
+                and role_name = #{roleName}
+            </if>
+        </where>-->
+<!--        <trim prefix="where" prefixOverrides="and">
+            <if test="roleName != null and roleName != ''">
+                and role_name = #{roleName}
+            </if>
+        </trim>-->
+        <where>
+            <if test="roleName != null and roleName != ''">
+                and role_name like #{bind_name}
+            </if>
+            <if test="note != null and note != ''">
+                and note like #{bind_note}
+            </if>
+        </where>
+    </select>
+    <select id="findRolesByRowBounds" resultType="com.pengo.demo.chapter01.Role">
+        select *
+        from t_role
+        <where>
+            role_name like concat('%',#{roleName},'%')
+        </where>
+    </select>
+    <select id="findRolesByPageParams" resultType="com.pengo.demo.chapter01.Role">
+        select *
+        from t_role
+        <where>
+            role_name like concat('%',#{roleName},'%')
+        </where>
+    </select>
+    <update id="updateRole">
+        update t_role
+<!--        <set>
+            <if test="roleName != null and roleName != ''">
+                role_name = #{roleName},
+            </if>
+            <if test="note != null and note != ''">
+                note = #{note}
+            </if>
+        </set>-->
+        <trim prefix="set" suffixOverrides=",">
+            <if test="roleName != null and roleName != ''">
+                role_name = #{roleName},
+            </if>
+            <if test="note != null and note != ''">
+                note = #{note}
+            </if>
+        </trim>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+</mapper>

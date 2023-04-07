@@ -92,7 +92,7 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
  */
 /**
  * 配置，里面好多配置项
- * 
+ *
  */
 public class Configuration {
 
@@ -110,7 +110,7 @@ public class Configuration {
   //默认启用缓存
   protected boolean cacheEnabled = true;
   protected boolean callSettersOnNulls = false;
-  
+
   protected String logPrefix;
   protected Class <? extends Log> logImpl;
   protected LocalCacheScope localCacheScope = LocalCacheScope.SESSION;
@@ -122,6 +122,7 @@ public class Configuration {
   protected AutoMappingBehavior autoMappingBehavior = AutoMappingBehavior.PARTIAL;
   //---------以上都是<settings>节点-------
 
+  //全局参数
   protected Properties variables = new Properties();
   //对象工厂和对象包装器工厂
   protected ObjectFactory objectFactory = new DefaultObjectFactory();
@@ -710,7 +711,7 @@ public class Configuration {
   public void addCacheRef(String namespace, String referencedNamespace) {
     cacheRefMap.put(namespace, referencedNamespace);
   }
-  
+
   /*
    * Parses all the unprocessed statement nodes in the cache. It is recommended
    * to call this method once all the mappers are added as it provides fail-fast

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pengo.demo.chapter09.ColorMapper">
+    <resultMap id="baseMap" type="com.pengo.demo.chapter09.ColorBean">
+        <id property="id" column="id"/>
+        <result property="color" column="color" jdbcType="INTEGER" typeHandler="com.pengo.demo.chapter09.ColorEnumTypeHandler"/>
+        <result property="note" column="note"/>
+    </resultMap>
+
+    <select id="getColor" parameterType="integer" resultMap="baseMap">
+        select * from t_color where id = #{id}
+    </select>
+</mapper>
